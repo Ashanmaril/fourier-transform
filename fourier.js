@@ -1,5 +1,15 @@
-const inputData = [0.0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707];
+#!/usr/bin/env node
+'use strict';
 
+const math = require('./math.min.js');
+const program = require('commander');
+const fs = require('fs');
+
+fs.readFile('samples.dat', 'utf8', (err, contents) => {
+    console.log('file contents:', contents);
+});
+
+const inputData = [0.0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707];
 const result = dft(inputData);
 console.log(result);
 
@@ -19,8 +29,11 @@ function dft(data) {
         const magnitude = math.sqrt(math.add(math.square(nyquistModifiedFrequency.re), math.square(nyquistModifiedFrequency.im)));
         // Average by dividing by number of samples
         const amplitude = math.divide(magnitude, N);
+        // Calculate phase angle by taking arctan of frequency plotten on complex plane
+        const phaseAngleArg = math.divide(nyquistModifiedFrequency.im, nyquistModifiedFrequency.re);
+        const phaseAngle = Math.atan(phaseAngleArg) * 180/Math.PI;
 
-        frequencies.push(amplitude);
+        frequencies.push({'amplitude': amplitude, 'phaseAngle': phaseAngle});
     }
 
     return frequencies;

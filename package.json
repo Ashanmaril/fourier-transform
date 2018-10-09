@@ -1,0 +1,23 @@
+{
+  "name": "fourier-transform",
+  "version": "1.0.0",
+  "description": "",
+  "main": "fourier.js",
+  "bin": "fourtier.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ashanmaril/fourier-transform.git"
+  },
+  "author": "Hayden Lueck",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ashanmaril/fourier-transform/issues"
+  },
+  "homepage": "https://github.com/Ashanmaril/fourier-transform#readme",
+  "dependencies": {
+    "commander": "^2.19.0"
+  }
+}
