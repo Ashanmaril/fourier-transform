@@ -4,33 +4,21 @@
 const math = require('./math.min.js');
 const fs = require('fs');
 
-if (process.argv.length < 3) {
-    console.log("Error: not enough arguments.");
-    process.exit();
-}
-
-const inputData = parseFile(process.argv[2]);
-console.log('File contents:', inputData);
-// const inputData = [0.0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707];
-
-const result = dft(inputData);
-console.log(result);
-
 function parseFile(fileName) {
     try {
         const fileContents = fs.readFileSync(fileName, 'utf8');
         return fileContents.split('\n').map(num => Number(num));
     } catch (err) {
-        console.log('Error reading file,', fileName);
+        console.error('Error reading file,', fileName);
         process.exit();
     }
 }
 
-function dft(data) {
+function dft(data, samplingFrequency) {
     const frequencies = [];
     const N = data.length;
-    // Can't measure frequencies above Nyquist Limit, N / 2
-    const nyquistLimit = Math.floor(N/2);
+    // Can't measure frequencies above Nyquist Limit, samplingFrequency / 2
+    const nyquistLimit = Math.floor(samplingFrequency/2);
 
     for (let i = 0; i < nyquistLimit; i++) {
         const sample = data[i];
@@ -39,7 +27,12 @@ function dft(data) {
         // Double frequency since we only calculated for half the samples
         const nyquistModifiedFrequency = math.multiply(frequency, 2);
         // Get magnitude of frequency amplitude via pythagorean theorem
-        const magnitude = math.sqrt(math.add(math.square(nyquistModifiedFrequency.re), math.square(nyquistModifiedFrequency.im)));
+        const magnitude = math.sqrt(
+            math.add(
+                math.square(nyquistModifiedFrequency.re),
+                math.square(nyquistModifiedFrequency.im)
+            )
+        );
         // Average by dividing by number of samples
         const amplitude = math.divide(magnitude, N);
         // Calculate phase angle by taking arctan of frequency plotten on complex plane
@@ -47,7 +40,7 @@ function dft(data) {
         const phaseAngle = Math.atan(phaseAngleArg) * 180/Math.PI;
 
         frequencies.push({
-            'frequency': frequency,
+            'frequency': i,
             'amplitude': amplitude,
             'phaseAngle': phaseAngle
         });
@@ -76,3 +69,21 @@ function calcFreqBin(data, sample, N, k) {
 function round(num) {
     return Math.round(num * 100) / 100
 }
+
+if (process.argv.length < 4) {
+    console.error("Error: not enough arguments.");
+    process.exit();
+}
+
+const inputData = parseFile(process.argv[2]);
+console.log('File contents:', inputData);
+// const inputData = [0.0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707];
+
+const samplingFrequency = Number(process.argv[3]);
+if (!samplingFrequency) {
+    console.error('Invalid sampling frequency:', samplingFrequency);
+    process.exit();
+}
+
+const result = dft(inputData, samplingFrequency);
+console.log(result);
