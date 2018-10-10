@@ -9,16 +9,17 @@ if (process.argv.length < 3) {
     process.exit();
 }
 
-let fileContents = getFileContents(process.argv[2]);
-console.log('File contents:', fileContents);
+const inputData = parseFile(process.argv[2]);
+console.log('File contents:', inputData);
+// const inputData = [0.0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707];
 
-const inputData = [0.0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707];
 const result = dft(inputData);
 console.log(result);
 
-function getFileContents(fileName) {
+function parseFile(fileName) {
     try {
-        return fs.readFileSync(fileName, 'utf8');
+        const fileContents = fs.readFileSync(fileName, 'utf8');
+        return fileContents.split('\n').map(num => Number(num));
     } catch (err) {
         console.log('Error reading file,', fileName);
         process.exit();
