@@ -2,16 +2,28 @@
 'use strict';
 
 const math = require('./math.min.js');
-const program = require('commander');
 const fs = require('fs');
 
-fs.readFile('samples.dat', 'utf8', (err, contents) => {
-    console.log('file contents:', contents);
-});
+if (process.argv.length < 3) {
+    console.log("Error: not enough arguments.");
+    process.exit();
+}
+
+let fileContents = getFileContents(process.argv[2]);
+console.log('File contents:', fileContents);
 
 const inputData = [0.0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707];
 const result = dft(inputData);
 console.log(result);
+
+function getFileContents(fileName) {
+    try {
+        return fs.readFileSync(fileName, 'utf8');
+    } catch (err) {
+        console.log('Error reading file,', fileName);
+        process.exit();
+    }
+}
 
 function dft(data) {
     const frequencies = [];
@@ -33,7 +45,11 @@ function dft(data) {
         const phaseAngleArg = math.divide(nyquistModifiedFrequency.im, nyquistModifiedFrequency.re);
         const phaseAngle = Math.atan(phaseAngleArg) * 180/Math.PI;
 
-        frequencies.push({'amplitude': amplitude, 'phaseAngle': phaseAngle});
+        frequencies.push({
+            'frequency': frequency,
+            'amplitude': amplitude,
+            'phaseAngle': phaseAngle
+        });
     }
 
     return frequencies;
