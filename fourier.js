@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const math = require('./math.min.js');
+const math = require('mathjs');
 const fs = require('fs');
 
 function parseFile(fileName) {

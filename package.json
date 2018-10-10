@@ -17,5 +17,7 @@
     "url": "https://github.com/Ashanmaril/fourier-transform/issues"
   },
   "homepage": "https://github.com/Ashanmaril/fourier-transform#readme",
-  "dependencies": {}
+  "dependencies": {
+    "mathjs": "^5.2.0"
+  }
 }
