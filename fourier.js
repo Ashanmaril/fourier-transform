@@ -67,7 +67,7 @@ function calcFreqBin(data, sample, N, k) {
 }
 
 function round(num) {
-    return Math.round(num * 100) / 100
+    return Math.round(num * 100) / 100;
 }
 
 function writeResultsToFile(resultObject) {
