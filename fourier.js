@@ -70,13 +70,22 @@ function round(num) {
     return Math.round(num * 100) / 100
 }
 
+function writeResultsToFile(resultObject) {
+    let outputString = '';
+    resultObject.forEach(result => {
+        outputString += `Frequency:${result.frequency}\t\tAmplitude:${result.amplitude}\t\tPhase Angle:${result.phaseAngle}\n`
+    });
+    fs.writeFileSync('output.dat', outputString);
+    console.log('Results written to output.dat');
+}
+
 if (process.argv.length < 4) {
     console.error("Error: not enough arguments.");
     process.exit();
 }
 
 const inputData = parseFile(process.argv[2]);
-console.log('File contents:', inputData);
+console.log('Input file contents:', inputData);
 // const inputData = [0.0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707];
 
 const samplingFrequency = Number(process.argv[3]);
@@ -87,3 +96,5 @@ if (!samplingFrequency) {
 
 const result = dft(inputData, samplingFrequency);
 console.log(result);
+
+writeResultsToFile(result);
