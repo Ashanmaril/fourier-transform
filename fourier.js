@@ -21,8 +21,7 @@ function dft(data, samplingFrequency) {
     const nyquistLimit = Math.floor(samplingFrequency/2);
 
     for (let i = 0; i < nyquistLimit; i++) {
-        const sample = data[i];
-        const frequency = calcFreqBin(data, sample, N, i);
+        const frequency = calcFreqBin(data, N, i);
 
         // Double frequency since we only calculated for half the samples
         const nyquistModifiedFrequency = math.multiply(frequency, 2);
@@ -49,7 +48,7 @@ function dft(data, samplingFrequency) {
     return frequencies;
 }
 
-function calcFreqBin(data, sample, N, k) {
+function calcFreqBin(data, N, k) {
     let sum = math.complex(0, 0);
     data.forEach((xSubN, index) => {
         const innerArg = -k * index * 2*Math.PI / N;
