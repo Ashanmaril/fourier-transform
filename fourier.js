@@ -21,25 +21,24 @@ function dft(data, samplingFrequency) {
     const nyquistLimit = Math.floor(samplingFrequency/2);
 
     for (let i = 0; i < nyquistLimit; i++) {
-        const frequency = calcFreqBin(data, N, i);
-
-        // Double frequency since we only calculated for half the samples
-        const nyquistModifiedFrequency = math.multiply(frequency, 2);
-        // Get magnitude of frequency amplitude via pythagorean theorem
+        let fourierCoefficient = calcFreqBin(data, N, i);
+        // Double since we only calculated for half the samples
+        fourierCoefficient = math.multiply(fourierCoefficient, 2);
+        // Calculate magnitude via pythagorean theorem
         const magnitude = math.sqrt(
             math.add(
-                math.square(nyquistModifiedFrequency.re),
-                math.square(nyquistModifiedFrequency.im)
+                math.square(fourierCoefficient.re),
+                math.square(fourierCoefficient.im)
             )
         );
         // Average by dividing by number of samples
         const amplitude = math.divide(magnitude, N);
         // Calculate phase angle by taking arctan of frequency plotten on complex plane
-        const phaseAngleArg = math.divide(nyquistModifiedFrequency.im, nyquistModifiedFrequency.re);
+        const phaseAngleArg = math.divide(fourierCoefficient.im, fourierCoefficient.re);
         const phaseAngle = Math.atan(phaseAngleArg) * 180/Math.PI;
 
         frequencies.push({
-            'frequency': i,
+            'frequencyBin': i,
             'amplitude': amplitude,
             'phaseAngle': phaseAngle
         });
